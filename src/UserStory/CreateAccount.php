@@ -36,6 +36,14 @@ class CreateAccount
         // Vérifier si le mot de passe est sécurisé
         // Si tel n'est pas le cas, lancer une exception
         // Vérifier l'unicité de l'email
+        $dql="SELECT p.email FROM App\Entity\User p";
+        $query=$this->entityManager->createQuery($dql);
+        $emailBDDs=$query->getScalarResult();
+        foreach ($emailBDDs as $emailBDD) {
+            if ($emailBDD==$email) {
+                throw new \Exception("L'adresse mail existe déjà !");
+            }
+        }
         // Si tel n'est pas le cas, lancer une exception
 
         // Insérer les données dans la base de données
