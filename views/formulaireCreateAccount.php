@@ -1,47 +1,39 @@
-<?php
-use App\UserStory\CreateAccount;
-use Doctrine\ORM\EntityManager;
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Inscription</title>
 
-require_once "../vendor/autoload.php";
-$entityManager = require __DIR__ . "/../config/bootstrap.php";
+</head>
+<body>
+<div class="container mt-5">
+    <h1>Inscription</h1>
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        $pseudo = $_POST['pseudo'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-
-        $createAccount = new CreateAccount($entityManager);
-        $user = $createAccount->execute($pseudo, $email, $password);
-
-        // Redirige vers la page de connexion après création du compte
-        header("Location: views/login.php");
-        exit;
-    } catch (\Exception $e) {
-        $error = $e->getMessage();
-    }
-}
-?>
-
-    <!DOCTYPE html>
-    <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <title>Créer un compte</title>
-    </head>
-    <body>
-
-    <h1>Créer un compte</h1>
-    <?php if (!empty($error)): ?>
-        <p style="color:red"><?= $error ?></p>
+    <?php if (isset($_SESSION['message'])): ?>
+        <p class="alert alert-danger"><?php echo htmlspecialchars($_SESSION['message']); unset($_SESSION['message']); ?></p>
     <?php endif; ?>
-    <form method="post">
-        <label>Pseudo : <input type="text" name="pseudo" required></label><br>
-        <label>Email : <input type="email" name="email" required></label><br>
-        <label>Mot de passe : <input type="password" name="password" required></label><br>
-        <button type="submit">Créer un compte</button>
+
+    <form action="index.php?controller=inscription&action=register" method="POST" class="mt-4">
+        <div class="form-group">
+            <label for="pseudo">Pseudo:</label>
+            <input type="text" id="pseudo" name="pseudo" class="form-control" required maxlength="50">
+        </div>
+
+        <div class="form-group">
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Mot de passe:</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+
+        <input type="submit" value="S'inscrire" class="btn btn-primary">
     </form>
 
-    </body>
-    </html>
-
+    <a href="index.php?controller=Login&action=index" class="btn btn-link mt-3">Déjà inscrit ? Connectez-vous</a>
+</div>
+</body>
+</html>

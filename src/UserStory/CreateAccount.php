@@ -51,6 +51,9 @@ class CreateAccount
 
         // 2. Créer une instance de la classe User avec l'email, le pseudo et le mot de passe hashé
         $user=new User();
+        $user->setPseudo($pseudo);
+        $user->setEmail($email);
+        $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
         // 3. Persister l'instance en utilisant l'EntityManager
         $this->entityManager->persist($user);
 
